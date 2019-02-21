@@ -1,0 +1,32 @@
+server:
+  port: ${server_port:5809}
+
+
+management:
+  endpoints:
+    gateway:
+      enabled: true
+    web:
+      exposure:
+        include: "*"
+        exclude: shutdown,threaddump
+      base-path: /actuator
+
+logging:
+  level:
+    root: INFO
+    zjtech.websocket.connection: debug
+
+websocket:
+  termination:
+    enabled: true
+    enable-web-error-handler: true
+    endpoint: "/ws"
+    order: -1
+    ping:
+      enabled: true
+      interval: 10
+      retries: 3
+      supress-log: false
+    scan:
+      api-package: integration.api

@@ -1,0 +1,137 @@
+/**
+ * Apply global settings to all projects
+ */
+buildscript {
+  repositories {
+    maven {
+      url "https://plugins.gradle.org/m2/"
+    }
+    jcenter()
+  }
+
+  dependencies {
+  }
+}
+
+plugins {
+  id 'java'
+  id 'idea'
+  id 'maven'
+  id 'project-report'
+  id 'com.jfrog.bintray' version '1.8.4'
+  id 'maven-publish'
+
+  id "io.freefair.lombok" version "3.1.0"
+}
+
+ext {
+  springBootVersion = '2.1.1.RELEASE'
+}
+
+sourceCompatibility = '1.8'
+targetCompatibility = '1.8'
+
+group = 'zjtech'
+version = '0.1'
+archivesBaseName = rootProject.name
+
+repositories {
+  jcenter()
+}
+
+dependencies {
+  compile "org.springframework.boot:spring-boot-autoconfigure:${springBootVersion}"
+
+  /*With Gradle 4.6 and later, the dependency should be declared in the annotationProcessor configuration, as shown in the following example*/
+  annotationProcessor "org.springframework.boot:spring-boot-configuration-processor:${springBootVersion}"
+
+  compile "org.springframework.boot:spring-boot-starter-webflux:${springBootVersion}"
+
+  //mark this dependency as compileOnly, the actuator endpoints will be enabled if the actuator dependency is added
+//  compileOnly "org.springframework.boot:spring-boot-starter-actuator:${springBootVersion}"
+  compile "org.springframework.boot:spring-boot-starter-actuator:${springBootVersion}"
+
+  testCompile "org.springframework.boot:spring-boot-starter-test:${springBootVersion}"
+}
+
+task javadocJar(type: Jar) {
+  from javadoc
+}
+
+task sourcesJar(type: Jar) {
+  from sourceSets.main.allSource
+}
+
+artifacts {
+  archives sourcesJar, javadocJar
+}
+
+
+publishing {
+  publications {
+    mavenJava(MavenPublication) {
+      from components.java
+
+      artifact sourcesJar {
+        classifier 'sources'
+      }
+
+      pom {
+        name = project.name
+        description = "Websocket termination mananger boot starter"
+        url = "https://github.com/zjtech/websocket-termination-spring-boot-starter"
+
+        licenses {
+          license {
+            name = "The Apache License, Version 2.0"
+            url = "http://www.apache.org/licenses/LICENSE-2.0.txt"
+            distribution = "repo"
+          }
+        }
+        developers {
+          developer {
+            name = "Jeven Wang"
+            email = "jujucom@126.com"
+          }
+        }
+        scm {
+          url = "https://github.com/zjtech/websocket-termination-spring-boot-starter"
+          connection = "scm:https://github.com/zjtech/websocket-termination-spring-boot-starter.git"
+          developerConnection = "scm:git://github.com/zjtech/websocket-termination-spring-boot-starter.git"
+        }
+      }
+    }
+  }
+}
+// todo : https://github.com/bintray/gradle-bintray-plugin
+/*
+bintray {
+  user = properties.getProperty("bintray.user")
+  key = properties.getProperty("bintray.key")
+  publications = ['mavenJava']
+  publish = true
+  pkg {
+    repo = 'maven'
+    name = project.name
+    desc = project.description
+    userOrg = 'web3j'
+    licenses = ['Apache-2.0']
+    issueTrackerUrl = 'https://github.com/web3j/web3j-spring-boot-starter/issues'
+    vcsUrl = 'https://github.com/web3j/web3j-spring-boot-starter.git'
+    websiteUrl = 'https://web3j.io'
+    publicDownloadNumbers = true
+    version {
+      gpg {
+        sign = true
+        passphrase = bintrayGpgPassphrase
+      }
+      mavenCentralSync {
+        sync = true
+        user = ossrhUsername
+        password = ossrhPassword
+        close = '1'
+      }
+    }
+  }
+
+}*/
