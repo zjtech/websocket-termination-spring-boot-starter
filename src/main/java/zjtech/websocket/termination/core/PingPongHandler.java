@@ -9,11 +9,11 @@ import reactor.core.scheduler.Schedulers;
 import zjtech.websocket.termination.config.WsConnectionConfigProps;
 
 @Slf4j
-public class PingHandler {
+public class PingPongHandler {
   private AtomicInteger pingCount = new AtomicInteger(0);
   private WsConnectionConfigProps configProps;
 
-  public PingHandler(WsConnectionConfigProps configProps) {
+  public PingPongHandler(WsConnectionConfigProps configProps) {
     this.configProps = configProps;
   }
 

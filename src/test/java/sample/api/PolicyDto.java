@@ -1,4 +1,4 @@
-package integration.api;
+package sample.api;
 
 import java.time.LocalDateTime;
 import lombok.Getter;

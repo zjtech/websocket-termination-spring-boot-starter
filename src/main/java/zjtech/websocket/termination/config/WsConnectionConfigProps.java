@@ -14,7 +14,6 @@ public class WsConnectionConfigProps {
   private int order = -1;
   private PingConfigProps ping = new PingConfigProps();
   private ScanPackage scan = new ScanPackage();
-  private boolean enableWebErrorHandler = false;
 
   @Getter
   @Setter

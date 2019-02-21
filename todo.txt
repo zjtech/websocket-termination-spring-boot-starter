@@ -1,5 +1,5 @@
 * no this file /classes/META-INF/spring-configuration-metadata.json
 
 Bugs:
-* multiple Session Holder
-* For pong, the pingCount wouldn't be reset in sessionHandler
+* multiple Session Holder  --- fixed
+* For pong, the pingCount wouldn't be reset in sessionHandler -- ready for test

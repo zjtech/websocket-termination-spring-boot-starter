@@ -4,9 +4,9 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.TreeNode;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import java.io.IOException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
+
+import java.io.IOException;
 
 public class WsUtils {
 
@@ -14,7 +14,6 @@ public class WsUtils {
 
   private final ApplicationContext ctx;
 
-  @Autowired
   public WsUtils(ObjectMapper objectMapper, ApplicationContext ctx) {
     this.objectMapper = objectMapper;
     this.ctx = ctx;

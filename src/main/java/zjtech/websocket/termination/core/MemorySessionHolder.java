@@ -18,7 +18,6 @@ public class MemorySessionHolder implements ISessionHolder {
     }
     sessionMap.put(sessionId, sessionHandler);
     log.info("Cache a session handler for client '{}'", sessionHandler.getClientInfo());
-    log.info("this.sessionHolder={}", this.hashCode());
   }
 
   @Override

@@ -6,7 +6,6 @@ import org.springframework.web.reactive.socket.WebSocketSession;
 import reactor.core.publisher.Mono;
 import zjtech.websocket.termination.common.WsUtils;
 
-/** Spring WebFlux websocket support does not yet support STOMP nor message brokers */
 @Slf4j
 public class DefaultWebSocketHandler implements WebSocketHandler {
 
@@ -18,20 +17,25 @@ public class DefaultWebSocketHandler implements WebSocketHandler {
 
   @Override
   public Mono<Void> handle(WebSocketSession webSocketSession) {
-    // handle the websocket session
-    SessionHandler sessionHandler = utils.getBean(SessionHandler.class);
-    Mono<Void> sessionMono = sessionHandler.handle(webSocketSession);
+    Mono<Void> sessionMono;
+    Mono<Void> messageMono;
+    try {
+      // handle the websocket session
+      SessionHandler sessionHandler = utils.getBean(SessionHandler.class);
+      sessionMono = sessionHandler.handle(webSocketSession);
 
-    // handle the received message
-    MessageHandler messageHandler = utils.getBean(MessageHandler.class);
-    Mono<Void> messageMono = messageHandler.handle(sessionHandler);
+      // handle the received message
+      MessageHandler messageHandler = utils.getBean(MessageHandler.class);
+      messageMono = messageHandler.handle(sessionHandler);
 
-    // PING message handler
-    PingHandler pingHandler = utils.getBean(PingHandler.class);
-    pingHandler.asyncHandle(sessionHandler);
+      // PING/PONG message handler
+      PingPongHandler pingPongHandler = utils.getBean(PingPongHandler.class);
+      pingPongHandler.asyncHandle(sessionHandler);
+    } catch (Exception e) {
+      log.error("Failed to handle the websocket session", e);
+      return Mono.empty();
+    }
 
-    return Mono.zip(sessionMono, messageMono)
-        .doOnError(thr -> log.warn("unexpected exception.", thr))
-        .then();
+    return Mono.zip(sessionMono, messageMono).then();
   }
 }

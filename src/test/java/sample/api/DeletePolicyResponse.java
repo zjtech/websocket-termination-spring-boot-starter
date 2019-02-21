@@ -1,4 +1,4 @@
-package integration.api;
+package sample.api;
 
 import lombok.Getter;
 import lombok.Setter;

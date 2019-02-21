@@ -1,10 +1,10 @@
-package integration.consumer;
+package sample.consumer;
 
-import integration.api.CreatePolicyRequest;
-import integration.api.CreatePolicyResponse;
-import integration.api.DeletePolicyRequest;
-import integration.api.DeletePolicyResponse;
-import integration.api.PolicyDto;
+import sample.api.CreatePolicyRequest;
+import sample.api.CreatePolicyResponse;
+import sample.api.DeletePolicyRequest;
+import sample.api.DeletePolicyResponse;
+import sample.api.PolicyDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cglib.beans.BeanCopier;
 import org.springframework.http.MediaType;

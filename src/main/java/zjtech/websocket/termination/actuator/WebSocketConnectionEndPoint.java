@@ -25,7 +25,6 @@ public class WebSocketConnectionEndPoint {
 
   @GetMapping
   public Map<String, Object> getStats() {
-    log.info("sessionHolder={}", sessionHolder.hashCode());
     List<String> sessionList = sessionHolder.getSessionList();
     Map<String, Object> map = new HashMap<>();
     map.put("activeSessionCount", sessionList.size());

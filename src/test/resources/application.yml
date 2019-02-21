@@ -15,18 +15,17 @@ management:
 logging:
   level:
     root: INFO
-    zjtech.websocket.connection: debug
+    zjtech.websocket.termination: debug
 
 websocket:
   termination:
     enabled: true
-    enable-web-error-handler: true
     endpoint: "/ws"
     order: -1
     ping:
       enabled: true
       interval: 10
       retries: 3
-      supress-log: false
+      supress-log: true
     scan:
-      api-package: integration.api
+      api-package: sample.api

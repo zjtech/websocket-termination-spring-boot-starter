@@ -1,8 +1,6 @@
 package zjtech.websocket.termination.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import java.util.HashMap;
-import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.actuate.autoconfigure.endpoint.condition.ConditionalOnEnabledEndpoint;
@@ -13,9 +11,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.Scope;
-import org.springframework.core.annotation.Order;
 import org.springframework.web.reactive.DispatcherHandler;
 import org.springframework.web.reactive.HandlerMapping;
 import org.springframework.web.reactive.handler.SimpleUrlHandlerMapping;
@@ -23,25 +19,16 @@ import org.springframework.web.reactive.socket.WebSocketHandler;
 import org.springframework.web.reactive.socket.client.ReactorNettyWebSocketClient;
 import org.springframework.web.reactive.socket.client.WebSocketClient;
 import org.springframework.web.reactive.socket.server.support.WebSocketHandlerAdapter;
-import org.springframework.web.server.WebExceptionHandler;
 import reactor.core.publisher.EmitterProcessor;
 import reactor.core.scheduler.Schedulers;
 import zjtech.websocket.termination.actuator.WebSocketConnectionEndPoint;
 import zjtech.websocket.termination.common.Constants;
 import zjtech.websocket.termination.common.Constants.BeanName;
-import zjtech.websocket.termination.common.MyWebExceptionHandler;
 import zjtech.websocket.termination.common.WsUtils;
-import zjtech.websocket.termination.core.CommandMappingHandler;
-import zjtech.websocket.termination.core.DefaultClientConnectionListener;
-import zjtech.websocket.termination.core.DefaultWebSocketHandler;
-import zjtech.websocket.termination.core.IClientConnectionListener;
-import zjtech.websocket.termination.core.IRequestParser;
-import zjtech.websocket.termination.core.ISessionHolder;
-import zjtech.websocket.termination.core.MemorySessionHolder;
-import zjtech.websocket.termination.core.MessageHandler;
-import zjtech.websocket.termination.core.PingHandler;
-import zjtech.websocket.termination.core.RequestParser;
-import zjtech.websocket.termination.core.SessionHandler;
+import zjtech.websocket.termination.core.*;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @Slf4j
 @ConditionalOnProperty(name = "websocket.termination.enabled", matchIfMissing = true)
@@ -86,6 +73,7 @@ public class WsConnectionAutoConfigure {
    * @return ISessionHolder
    */
   @Bean
+  @ConditionalOnMissingBean
   public ISessionHolder sessionHolder() {
     log.debug("Init a default ISessionHolder");
     return new MemorySessionHolder();
@@ -127,17 +115,17 @@ public class WsConnectionAutoConfigure {
   }
 
   @Bean
-  public IClientConnectionListener clientConnectionListener() {
-    return new DefaultClientConnectionListener(sessionHolder());
+  public IClientConnectionListener clientConnectionListener(ISessionHolder sessionHolder) {
+    return new DefaultClientConnectionListener(sessionHolder);
   }
 
-  /*  @Bean(name = Constants.BeanName.clientConnectedEventBus)
+  @Bean(name = Constants.BeanName.clientConnectedEventBus)
   public EmitterProcessor<SessionHandler> clientConnectedEventBus(
       IClientConnectionListener clientConnectionListener) {
     EmitterProcessor<SessionHandler> processor = EmitterProcessor.create();
     processor.subscribeOn(Schedulers.elastic()).subscribe(clientConnectionListener::connect);
     return processor;
-  }*/
+  }
 
   @Bean(name = BeanName.clientDisConnectedEventBus)
   public EmitterProcessor<SessionHandler> clientDisConnectedEventBus(
@@ -171,8 +159,8 @@ public class WsConnectionAutoConfigure {
   @Bean
   @Scope(value = "prototype")
   @ConditionalOnProperty(name = "websocket.termination.ping.enabled", matchIfMissing = true)
-  public PingHandler pingPongHandler(WsConnectionConfigProps configProps) {
-    return new PingHandler(configProps);
+  public PingPongHandler pingPongHandler(WsConnectionConfigProps configProps) {
+    return new PingPongHandler(configProps);
   }
 
   @Bean
@@ -181,21 +169,13 @@ public class WsConnectionAutoConfigure {
     return new RequestParser(wsUtils, commandMappingHandler);
   }
 
-  /** Actuator endpoint */
+  /**
+   * Actuator endpoint
+   */
   @Bean
   @ConditionalOnEnabledEndpoint
   public WebSocketConnectionEndPoint webSocketConnectionEndPoint(
       CommandMappingHandler mappingHandler, ISessionHolder sessionHolder) {
     return new WebSocketConnectionEndPoint(sessionHolder, mappingHandler);
-  }
-
-  @Bean
-  @Order(0)
-  @ConditionalOnProperty(
-      value = "websocket.termination.enable-web-error-handler",
-      matchIfMissing = true)
-  public WebExceptionHandler exceptionHandler() {
-    log.info("enable a default WebExceptionHandler");
-    return new MyWebExceptionHandler();
   }
 }
