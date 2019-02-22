@@ -8,7 +8,7 @@ import zjtech.websocket.termination.api.WebSocketCommand;
 @Getter
 @Setter
 @WebSocketCommand("DELETE_POLICY")
-public class DeletePolicyRequest extends BaseRequest {
+public class DeletePolicyRequest implements BaseRequest {
 
   private String id;
 }

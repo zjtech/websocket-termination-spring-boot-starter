@@ -1,6 +1,8 @@
 package zjtech.websocket.termination.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.HashMap;
+import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.actuate.autoconfigure.endpoint.condition.ConditionalOnEnabledEndpoint;
@@ -25,10 +27,17 @@ import zjtech.websocket.termination.actuator.WebSocketConnectionEndPoint;
 import zjtech.websocket.termination.common.Constants;
 import zjtech.websocket.termination.common.Constants.BeanName;
 import zjtech.websocket.termination.common.WsUtils;
-import zjtech.websocket.termination.core.*;
-
-import java.util.HashMap;
-import java.util.Map;
+import zjtech.websocket.termination.core.CommandMappingHandler;
+import zjtech.websocket.termination.core.DefaultClientConnectionListener;
+import zjtech.websocket.termination.core.DefaultWebSocketHandler;
+import zjtech.websocket.termination.core.IClientConnectionListener;
+import zjtech.websocket.termination.core.IRequestParser;
+import zjtech.websocket.termination.core.ISessionHolder;
+import zjtech.websocket.termination.core.MemorySessionHolder;
+import zjtech.websocket.termination.core.MessageHandler;
+import zjtech.websocket.termination.core.PingPongHandler;
+import zjtech.websocket.termination.core.RequestParser;
+import zjtech.websocket.termination.core.SessionHandler;
 
 @Slf4j
 @ConditionalOnProperty(name = "websocket.termination.enabled", matchIfMissing = true)
@@ -169,9 +178,7 @@ public class WsConnectionAutoConfigure {
     return new RequestParser(wsUtils, commandMappingHandler);
   }
 
-  /**
-   * Actuator endpoint
-   */
+  /** Actuator endpoint */
   @Bean
   @ConditionalOnEnabledEndpoint
   public WebSocketConnectionEndPoint webSocketConnectionEndPoint(

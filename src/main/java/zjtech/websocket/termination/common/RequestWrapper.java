@@ -6,7 +6,7 @@ import zjtech.websocket.termination.api.BaseRequest;
 
 @Getter
 @Setter
-public class RequestWrapper<T extends BaseRequest> extends BaseRequest {
+public class RequestWrapper<T extends BaseRequest> implements BaseRequest {
 
   private String command;
   private T request;

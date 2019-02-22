@@ -1,16 +1,16 @@
 package sample.consumer;
 
-import sample.api.CreatePolicyRequest;
-import sample.api.CreatePolicyResponse;
-import sample.api.DeletePolicyRequest;
-import sample.api.DeletePolicyResponse;
-import sample.api.PolicyDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cglib.beans.BeanCopier;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
+import sample.api.CreatePolicyRequest;
+import sample.api.CreatePolicyResponse;
+import sample.api.DeletePolicyRequest;
+import sample.api.DeletePolicyResponse;
+import sample.api.PolicyDto;
 import zjtech.websocket.termination.core.Consume;
 import zjtech.websocket.termination.core.ConsumerContext;
 import zjtech.websocket.termination.core.MessageConsumer;
