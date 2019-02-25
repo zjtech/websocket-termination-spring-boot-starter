@@ -26,7 +26,7 @@ public class WsUtils {
     try {
       return objectMapper.readTree(jsonData);
     } catch (IOException e) {
-      throw new WsConnectionException(e);
+      throw new WsConnectionException(WsErrorCode.INVALID_JSON_DATA, e);
     }
   }
 
@@ -34,7 +34,7 @@ public class WsUtils {
     try {
       return objectMapper.treeToValue(node, valueType);
     } catch (JsonProcessingException e) {
-      throw new WsConnectionException(e);
+      throw new WsConnectionException(WsErrorCode.INVALID_JSON_DATA, e);
     }
   }
 
@@ -42,7 +42,7 @@ public class WsUtils {
     try {
       return objectMapper.writeValueAsString(valueObject);
     } catch (JsonProcessingException e) {
-      throw new WsConnectionException(e);
+      throw new WsConnectionException(WsErrorCode.INVALID_JSON_DATA, e);
     }
   }
 }

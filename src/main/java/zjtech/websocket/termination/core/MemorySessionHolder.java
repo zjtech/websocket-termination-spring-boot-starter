@@ -30,8 +30,7 @@ public class MemorySessionHolder implements ISessionHolder {
     SessionHandler sessionHandler = sessionMap.remove(sessionId);
     if (sessionHandler != null) {
       log.info(
-          "Remove a session handler from cache and the corresponding client is '{}'",
-          sessionHandler.getClientInfo());
+          "Remove a session handler from cache for client '{}'", sessionHandler.getClientInfo());
     }
     return sessionHandler;
   }
@@ -39,9 +38,7 @@ public class MemorySessionHolder implements ISessionHolder {
   @Override
   public SessionHandler remove(SessionHandler session) {
     SessionHandler sessionHandler = sessionMap.remove(session.getSessionId());
-    log.info(
-        "Remove a session handler from cache and the corresponding client is '{}'",
-        session.getClientInfo());
+    log.info("Remove a session handler from cache for client '{}'", session.getClientInfo());
     return sessionHandler;
   }
 

@@ -19,7 +19,7 @@ public class CreatePolicyResponse extends BaseResponse {
   @Setter
   public static class Payload {
 
-    private String id;
+    private long id;
     private String name;
     private String description;
     private LocalDateTime createTime;

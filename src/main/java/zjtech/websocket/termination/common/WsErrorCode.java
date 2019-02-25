@@ -1,7 +1,10 @@
 package zjtech.websocket.termination.common;
 
 public enum WsErrorCode {
-  // for request
+  INVALID_JSON_DATA,
   COMMAND_REQUIRED,
-  UNKNOWN_COMMAND;
+  UNKNOWN_COMMAND,
+
+  CLIENT_CLOSED,
+  INTERNAL_ERROR;
 }

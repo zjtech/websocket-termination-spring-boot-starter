@@ -1,16 +1,9 @@
 package sample.consumer;
 
+import java.time.LocalDateTime;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.cglib.beans.BeanCopier;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
-import org.springframework.web.reactive.function.client.WebClient;
-import reactor.core.publisher.Mono;
-import sample.api.CreatePolicyRequest;
 import sample.api.CreatePolicyResponse;
-import sample.api.DeletePolicyRequest;
-import sample.api.DeletePolicyResponse;
-import sample.api.PolicyDto;
 import zjtech.websocket.termination.core.Consume;
 import zjtech.websocket.termination.core.ConsumerContext;
 import zjtech.websocket.termination.core.MessageConsumer;
@@ -20,69 +13,25 @@ import zjtech.websocket.termination.core.MessageConsumer;
 @MessageConsumer
 public class RestMessageForwarder {
 
-  private WebClient client;
-
-  private int internalError = 600;
-
-  public RestMessageForwarder() {
-    client = WebClient.create();
-  }
-
   @Consume("CREATE_POLICY")
   public void createPolicy(ConsumerContext ctx) {
-    CreatePolicyRequest request = (CreatePolicyRequest) ctx.getRequest();
-    BeanCopier copier =
-        BeanCopier.create(PolicyDto.class, CreatePolicyResponse.Payload.class, false);
-
-    // post the message to backend service
+    // you can forward the message to backend service
     log.info("forward a CreatePolicyRequest request to backend rest service.");
+    CreatePolicyResponse.Payload payload = new CreatePolicyResponse.Payload();
+    payload.setCreater("admin");
+    payload.setCreateTime(LocalDateTime.now());
+    payload.setDescription("a policy created in backend service");
+    payload.setId(11223344L);
+    payload.setName("policy1");
+    payload.setValidPolicy(true);
 
-    // return this object to client
-    client
-        .post()
-        .uri("http://10.113.49.230:5801/api/v1/policies")
-        .accept(MediaType.APPLICATION_JSON)
-        .body(Mono.just(request), CreatePolicyRequest.class)
-        .retrieve() // or using exchange()
-        .bodyToMono(PolicyDto.class)
-        .map(
-            policyDto -> {
-              // convert to response
-              CreatePolicyResponse response = new CreatePolicyResponse();
-              copier.copy(policyDto, response.getPayload(), null);
-              return response;
-            })
-        .doOnNext(response -> ctx.getSessionHandler().sendJsonString(response))
-        .doOnError(
-            thr -> {
-              CreatePolicyResponse baseResponse = new CreatePolicyResponse();
-              baseResponse.setErrorCode(internalError);
-              baseResponse.setErrorMessage(thr.getMessage());
-              ctx.getSessionHandler().sendJsonString(baseResponse);
-            })
-        .subscribe();
-  }
+    // and then send response to client
+    CreatePolicyResponse response = new CreatePolicyResponse();
+    response.setErrorCode(201);
+    response.setErrorMessage("A policy is created successfully.");
+    response.setCommand("CREATE_POLICY_RESPONSE");
+    response.setPayload(payload);
 
-  @Consume("DELETE_POLICY")
-  public void deletePolicy(ConsumerContext ctx) {
-    // post the message to backend service
-    log.info("forward a DeletePolicyRequest request to backend rest service.");
-    String id = ((DeletePolicyRequest) ctx.getRequest()).getId();
-
-    // return this object to client
-    client
-        .delete()
-        .uri("http://10.113.49.230:5801/api/v1/policies/" + id)
-        .accept(MediaType.APPLICATION_JSON)
-        .exchange() // or using exchange()
-        .map(
-            response -> {
-              DeletePolicyResponse baseResponse = new DeletePolicyResponse();
-              baseResponse.setErrorCode(response.statusCode().value());
-              baseResponse.setErrorMessage(response.statusCode().name());
-              return baseResponse;
-            })
-        .doOnNext(response -> ctx.getSessionHandler().sendJsonString(response))
-        .subscribe();
+    ctx.getSessionHandler().sendJsonString(response);
   }
 }

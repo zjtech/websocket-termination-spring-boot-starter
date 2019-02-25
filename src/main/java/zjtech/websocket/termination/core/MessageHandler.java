@@ -64,31 +64,25 @@ public class MessageHandler {
 
   private void handleError(
       SessionHandler sessionHandler, String receivedMessage, Throwable throwable) {
-    log.warn(
-        "An exception encountered: session={}, message={}.",
-        throwable,
-        sessionHandler.getSessionId(),
-        receivedMessage);
     ErrorResponse errorResponse = new ErrorResponse();
     if (throwable instanceof WsConnectionException) {
       log.warn(
-          "Received a unknown message from client '{}'.",
+          "Received a unknown message from client '{}' and the message is '{}'",
           sessionHandler.getClientInfo(),
           receivedMessage);
 
       WsErrorCode errorCode = ((WsConnectionException) throwable).getErrorCode();
-      if (errorCode != null) {
-        //        baseResponse.setErrorCode(errorCode.name());
-      }
+      errorResponse.setErrorCode(400);
+      errorResponse.setErrorMessage(errorCode.name());
+    } else {
+      String errorMsg =
+          String.format(
+              "An internal exception occurs for session {%s}, the message is: %s ",
+              sessionHandler.getSessionId(), receivedMessage);
+      log.warn(errorMsg, throwable);
+      errorResponse.setErrorCode(500);
+      errorResponse.setErrorMessage(throwable.getMessage());
     }
-    errorResponse.setErrorCode(500);
-
-    String errorMsg =
-        String.format(
-            "An internal exception occurs for session {%s}, the message is: %s ",
-            sessionHandler.getSessionId(), receivedMessage);
-    errorResponse.setErrorMessage(errorMsg);
-
     // send the response
     sessionHandler.sendJsonString(errorResponse);
   }

@@ -1,7 +1,6 @@
 package zjtech.websocket.termination.core;
 
 import java.nio.channels.ClosedChannelException;
-import java.util.concurrent.atomic.AtomicInteger;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.reactive.socket.WebSocketMessage;
 import org.springframework.web.reactive.socket.WebSocketMessage.Type;
@@ -11,6 +10,8 @@ import reactor.core.publisher.EmitterProcessor;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
 import reactor.netty.channel.AbortedException;
+import zjtech.websocket.termination.common.WsConnectionException;
+import zjtech.websocket.termination.common.WsErrorCode;
 import zjtech.websocket.termination.common.WsUtils;
 import zjtech.websocket.termination.config.WsConnectionConfigProps;
 
@@ -26,7 +27,6 @@ public class SessionHandler {
   private String sessionId;
   private String clientInfo;
   private volatile boolean isConnected;
-  private AtomicInteger pingCount = new AtomicInteger(0);
   private WsConnectionConfigProps configProps;
 
   public SessionHandler(
@@ -68,8 +68,7 @@ public class SessionHandler {
         .doOnNext(this::publishTextMessage)
         .doOnComplete(
             () -> {
-              log.info("The client '{}' is closed", clientInfo);
-              messageProcessor.onComplete();
+              completeProcessor();
               notifyDisconnect();
             })
         .then();
@@ -96,7 +95,7 @@ public class SessionHandler {
   }
 
   public void sendText(String message) {
-    this.send(session.textMessage(message));
+    send(session.textMessage(message));
   }
 
   public void send(WebSocketMessage msg) {
@@ -107,15 +106,23 @@ public class SessionHandler {
               throwable -> {
                 if (throwable instanceof ClosedChannelException
                     || throwable instanceof AbortedException) {
-                  log.warn(
-                      "Cannot sent message to client '{}' because it is disconnected.", clientInfo);
+                  if (!isPingOrPong(msg)) {
+                    log.warn("Won't send a message to a disconnected client '{}'", clientInfo);
+                  }
                   isConnected = false;
                 }
               })
           .subscribe();
     } else {
-      log.warn("Cannot sent message to client '{}' because it is disconnected.", clientInfo);
+      if (!isPingOrPong(msg)) {
+        log.warn("Won't send a message to a disconnected client '{}'", clientInfo);
+      }
+      throw new WsConnectionException(WsErrorCode.CLIENT_CLOSED);
     }
+  }
+
+  private boolean isPingOrPong(WebSocketMessage msg) {
+    return msg.getType().equals(Type.PONG) || msg.getType().equals(Type.PING);
   }
 
   public DirectProcessor<WebSocketMessage> pong() {
@@ -125,11 +132,16 @@ public class SessionHandler {
   public void close() {
     if (isConnected) {
       log.info("Trying to close termination for client ''", clientInfo);
-      isConnected = false;
-      this.messageProcessor.onComplete();
       session.close().subscribe();
+      isConnected = false;
+      completeProcessor();
       notifyDisconnect();
     }
+  }
+
+  private void completeProcessor() {
+    messageProcessor.onComplete();
+    pongMessageProcessor.onComplete();
   }
 
   public String getClientInfo() {
@@ -141,11 +153,11 @@ public class SessionHandler {
   }
 
   public void notifyConnect() {
-    this.clientConnectedEventBus.onNext(this);
+    clientConnectedEventBus.onNext(this);
   }
 
   public void notifyDisconnect() {
-    this.clientDisconnectedEventBus.onNext(this);
+    clientDisconnectedEventBus.onNext(this);
   }
 
   public String getSessionId() {

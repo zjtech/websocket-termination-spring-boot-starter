@@ -67,6 +67,9 @@ public class PingPongHandler {
     }
     int currentRetries = pingCount.get();
     if (currentRetries >= configProps.getPing().getRetries()) {
+      log.warn(
+          "Cannot get PONG message for {} times, the client could be disconnected.",
+          configProps.getPing().getRetries());
       sessionHandler.close();
       return true;
     }
