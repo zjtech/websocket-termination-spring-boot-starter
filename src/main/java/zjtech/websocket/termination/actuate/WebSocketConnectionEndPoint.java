@@ -1,4 +1,4 @@
-package zjtech.websocket.termination.actuator;
+package zjtech.websocket.termination.actuate;
 
 import java.util.HashMap;
 import java.util.List;

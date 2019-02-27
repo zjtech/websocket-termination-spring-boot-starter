@@ -23,7 +23,7 @@ import org.springframework.web.reactive.socket.client.WebSocketClient;
 import org.springframework.web.reactive.socket.server.support.WebSocketHandlerAdapter;
 import reactor.core.publisher.EmitterProcessor;
 import reactor.core.scheduler.Schedulers;
-import zjtech.websocket.termination.actuator.WebSocketConnectionEndPoint;
+import zjtech.websocket.termination.actuate.WebSocketConnectionEndPoint;
 import zjtech.websocket.termination.common.Constants;
 import zjtech.websocket.termination.common.Constants.BeanName;
 import zjtech.websocket.termination.common.WsUtils;

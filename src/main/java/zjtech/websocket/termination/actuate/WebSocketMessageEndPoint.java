@@ -1,4 +1,4 @@
-package zjtech.websocket.termination.actuator;
+package zjtech.websocket.termination.actuate;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.actuate.endpoint.annotation.DeleteOperation;
