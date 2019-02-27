@@ -19,5 +19,49 @@
   
 ## 一种可能的应用场景示例
 ![PIC](https://github.com/zjtech/websocket-termination-spring-boot-starter/blob/master/sample.png)   
- 
+
+## 
+
+## 如何开发
+* 添加依赖    
+对于gradle, 可以添加如下依赖
+```   
+compile "zjtech:websocket-termination-spring-boot-starter:0.1"
+```   
+* 在项目的配置文件中启用    
+```
+websocket:
+  termination:
+    scan:
+      api-package: sample.api   
+
+```
+```api-package```指定了客户端与服务端WebSocket消息对象的存放路径
+
+完整的配置项如下所示:   
+```
+websocket:
+  termination:
+    enabled: true
+    endpoint: "/ws"
+    order: -1
+    ping:
+      enabled: true
+      interval: 10
+      retries: 3
+      supress-log: true
+    scan:
+      api-package: sample.api
+```
+| 配置项                                             |   默认值   |            描述                     |
+|---------------------------------------------------|:---------:|----------------------------------------------:|
+| websocket.termination.enabled                     | true      | 是否启用WebSocket终结功能
+| websocket.termination.endpoint                    | /ws       | 客户端连接的端点，默认是 ws://IP:Port/ws                               |  
+| websocket.termination.order                       | -1        | 
+| websocket.termination.ping.enabled                | true      | 启用PING/PONG                                                        |
+| websocket.termination.ping.interval               | 10        | 单位秒，每隔多少秒服务端向客户端发送一次PING报文                           |
+| websocket.termination.ping.retries                | 3         | 当服务端发送了PING后，无法收到客户端的响应，最多尝试几次。并最终关闭session。 | 
+| websocket.termination.ping.supress-log            | true      | 是否打印PING发送和PONG接收的日志
+| websocket.termination.ping.scan.api-package       | <NA>      | 客户端与服务端通信的请求对象所处的包路径，需要开发人员自行指定，无默认值       |
+
                                                                                                                                   
