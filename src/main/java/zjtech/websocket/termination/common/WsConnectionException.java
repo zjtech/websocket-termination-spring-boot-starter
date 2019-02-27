@@ -11,6 +11,12 @@ public class WsConnectionException extends RuntimeException {
     this.errorCode = errorCode;
   }
 
+  /**
+   * Constructor.
+   *
+   * @param errorCode WsErrorCode
+   * @param throwable Throwable
+   */
   public WsConnectionException(WsErrorCode errorCode, Throwable throwable) {
     super(null, null, false, false);
     this.errorCode = errorCode;

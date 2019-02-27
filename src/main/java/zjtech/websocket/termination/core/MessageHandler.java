@@ -3,9 +3,8 @@ package zjtech.websocket.termination.core;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.ReflectionUtils;
 import reactor.core.publisher.Mono;
-import reactor.core.scheduler.Schedulers;
-import zjtech.websocket.termination.api.BaseRequest;
 import zjtech.websocket.termination.api.ErrorResponse;
+import zjtech.websocket.termination.api.Request;
 import zjtech.websocket.termination.common.RequestWrapper;
 import zjtech.websocket.termination.common.WsConnectionException;
 import zjtech.websocket.termination.common.WsErrorCode;
@@ -19,6 +18,13 @@ public class MessageHandler {
   private final CommandMappingHandler mappingHandler;
   private final WsUtils wsUtils;
 
+  /**
+   * Constructor.
+   *
+   * @param requestParser RequestParser
+   * @param mappingHandler CommandMappingHandler
+   * @param wsUtils WsUtils
+   */
   public MessageHandler(
       IRequestParser requestParser, CommandMappingHandler mappingHandler, WsUtils wsUtils) {
     this.requestParser = requestParser;
@@ -26,11 +32,17 @@ public class MessageHandler {
     this.wsUtils = wsUtils;
   }
 
+  /**
+   * Get the message and construct a ConsumerContext for consumer.
+   *
+   * @param sessionHandler SessionHandler
+   * @return Mono
+   */
   public Mono<Void> handle(SessionHandler sessionHandler) {
     // asynchronously consume message in an thread pool
     return sessionHandler
         .receive()
-        .subscribeOn(Schedulers.elastic())
+        //        .subscribeOn(Schedulers.elastic())
         .doOnNext(
             receivedMessage ->
                 Mono.just(receivedMessage)
@@ -54,12 +66,15 @@ public class MessageHandler {
     ReflectionUtils.invokeMethod(consumeInfo.getMethod(), instance, context);
   }
 
-  private IConsumerContext constructContext(SessionHandler sessionHandler, BaseRequest request) {
+  private IConsumerContext constructContext(SessionHandler sessionHandler, Request request) {
     RequestWrapper requestWrapper = (RequestWrapper) request;
 
-    // init a context
-    return new ConsumerContext(
-        sessionHandler, requestWrapper.getRequest(), requestWrapper.getCommand());
+    ConsumerContext<Request> consumerContext = new ConsumerContext<>();
+    consumerContext.setSessionHandler(sessionHandler);
+    consumerContext.setCommand(requestWrapper.getCommand());
+    consumerContext.setHeaders(requestWrapper.getHeader());
+    consumerContext.setPayload(requestWrapper.getPayload());
+    return consumerContext;
   }
 
   private void handleError(

@@ -8,7 +8,6 @@ import org.springframework.web.reactive.socket.WebSocketSession;
 import reactor.core.publisher.DirectProcessor;
 import reactor.core.publisher.EmitterProcessor;
 import reactor.core.publisher.Mono;
-import reactor.core.scheduler.Schedulers;
 import reactor.netty.channel.AbortedException;
 import zjtech.websocket.termination.common.WsConnectionException;
 import zjtech.websocket.termination.common.WsErrorCode;
@@ -29,6 +28,14 @@ public class SessionHandler {
   private volatile boolean isConnected;
   private WsConnectionConfigProps configProps;
 
+  /**
+   * Constructor.
+   *
+   * @param wsUtils WsUtils
+   * @param configProps WsConnectionConfigProps
+   * @param clientConnectedEventBus EmitterProcessor
+   * @param clientDisconnectedEventBus EmitterProcessor
+   */
   public SessionHandler(
       WsUtils wsUtils,
       WsConnectionConfigProps configProps,
@@ -42,6 +49,12 @@ public class SessionHandler {
     this.configProps = configProps;
   }
 
+  /**
+   * Handle the session.
+   *
+   * @param webSocketSession WebSocketSession
+   * @return Mono
+   */
   public Mono<Void> handle(WebSocketSession webSocketSession) {
     init(webSocketSession);
 
@@ -64,7 +77,7 @@ public class SessionHandler {
     return session
         .receive()
         .takeUntil(val -> !this.isConnected)
-        .subscribeOn(Schedulers.elastic())
+        //        .subscribeOn(Schedulers.elastic())
         .doOnNext(this::publishTextMessage)
         .doOnComplete(
             () -> {
@@ -89,15 +102,30 @@ public class SessionHandler {
     messageProcessor.onNext(textMsg);
   }
 
+  /**
+   * Send a object in json format.
+   *
+   * @param messageObj Object
+   */
   public void sendJsonString(Object messageObj) {
     String textMessage = wsUtils.convertString(messageObj);
     sendText(textMessage);
   }
 
+  /**
+   * Send a string to client.
+   *
+   * @param message string
+   */
   public void sendText(String message) {
     send(session.textMessage(message));
   }
 
+  /**
+   * Send the raw websocket message.
+   *
+   * @param msg WebSocketMessage
+   */
   public void send(WebSocketMessage msg) {
     if (isConnected) {
       session
@@ -129,6 +157,9 @@ public class SessionHandler {
     return pongMessageProcessor;
   }
 
+  /**
+   * Blocking close for a websocket session.
+   */
   public void close() {
     if (isConnected) {
       log.info("Trying to close termination for client ''", clientInfo);

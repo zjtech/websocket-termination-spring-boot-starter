@@ -1,12 +1,10 @@
 package zjtech.websocket.termination.core;
 
-import zjtech.websocket.termination.api.BaseRequest;
-
-public interface IConsumerContext {
+public interface IConsumerContext<T> {
 
   SessionHandler getSessionHandler();
 
-  BaseRequest getRequest();
+  T getPayload();
 
   String getCommand();
 }

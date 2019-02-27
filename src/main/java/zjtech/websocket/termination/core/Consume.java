@@ -11,5 +11,9 @@ import java.lang.annotation.Target;
 @Documented
 public @interface Consume {
 
+  /**
+   * The value corresponds to a specific command name.
+   * @return
+   */
   String value();
 }

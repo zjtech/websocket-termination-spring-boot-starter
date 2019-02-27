@@ -77,7 +77,7 @@ public class WsConnectionAutoConfigure {
   }
 
   /**
-   * Register a session holder bean for maintaining the websocket session in memory
+   * Register a session holder bean for maintaining the websocket session in memory.
    *
    * @return ISessionHolder
    */
@@ -103,7 +103,7 @@ public class WsConnectionAutoConfigure {
   }
 
   /**
-   * Initialize a handler mapping for websocket
+   * Initialize a handler mapping for websocket.
    *
    * @param connectionConfigProps WsConnectionConfigProps
    * @return HandlerMapping
@@ -128,6 +128,12 @@ public class WsConnectionAutoConfigure {
     return new DefaultClientConnectionListener(sessionHolder);
   }
 
+  /**
+   * Init a event bus for handling client connection.
+   *
+   * @param clientConnectionListener IClientConnectionListener
+   * @return EmitterProcessor
+   */
   @Bean(name = Constants.BeanName.clientConnectedEventBus)
   public EmitterProcessor<SessionHandler> clientConnectedEventBus(
       IClientConnectionListener clientConnectionListener) {
@@ -136,6 +142,12 @@ public class WsConnectionAutoConfigure {
     return processor;
   }
 
+  /**
+   * Init a event bus for handling client disconnection.
+   *
+   * @param clientConnectionListener IClientConnectionListener
+   * @return EmitterProcessor
+   */
   @Bean(name = BeanName.clientDisConnectedEventBus)
   public EmitterProcessor<SessionHandler> clientDisConnectedEventBus(
       IClientConnectionListener clientConnectionListener) {
@@ -178,7 +190,6 @@ public class WsConnectionAutoConfigure {
     return new RequestParser(wsUtils, commandMappingHandler);
   }
 
-  /** Actuator endpoint */
   @Bean
   @ConditionalOnEnabledEndpoint
   public WebSocketConnectionEndPoint webSocketConnectionEndPoint(

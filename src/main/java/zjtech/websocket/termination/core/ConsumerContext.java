@@ -1,18 +1,16 @@
 package zjtech.websocket.termination.core;
 
-import lombok.AllArgsConstructor;
+import java.util.Map;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
-import zjtech.websocket.termination.api.BaseRequest;
+import lombok.Setter;
+import zjtech.websocket.termination.api.Request;
 
 @Getter
-@AllArgsConstructor
-@NoArgsConstructor
-public class ConsumerContext implements IConsumerContext {
+@Setter
+public class ConsumerContext<T extends Request> implements IConsumerContext {
 
   private SessionHandler sessionHandler;
-
-  private BaseRequest request;
-
   private String command;
+  private Map<String, ?> headers;
+  private T payload;
 }

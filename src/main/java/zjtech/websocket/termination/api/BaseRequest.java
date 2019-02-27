@@ -1,3 +1,3 @@
 package zjtech.websocket.termination.api;
 
-public interface BaseRequest {}
+public class BaseRequest implements Request {}

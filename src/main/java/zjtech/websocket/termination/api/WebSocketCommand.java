@@ -11,7 +11,10 @@ import java.lang.annotation.Target;
 @Documented
 public @interface WebSocketCommand {
 
-  boolean enabled() default true;
-
+  /**
+   * The command name.
+   *
+   * @return command name
+   */
   String value();
 }

@@ -22,6 +22,12 @@ public class WsUtils {
     return ctx.getBean(beanClass);
   }
 
+  /**
+   * Convert the JSON string to JSON node.
+   *
+   * @param jsonData json string data
+   * @return JsonNode
+   */
   public JsonNode convertJsonNode(String jsonData) {
     try {
       return objectMapper.readTree(jsonData);
@@ -30,6 +36,13 @@ public class WsUtils {
     }
   }
 
+  /**
+   * Bind data given JSON tree * contains into specific value.
+   *
+   * @param node TreeNode
+   * @param valueType Class
+   * @return value
+   */
   public <T> T treeToValue(TreeNode node, Class<T> valueType) {
     try {
       return objectMapper.treeToValue(node, valueType);
@@ -38,6 +51,12 @@ public class WsUtils {
     }
   }
 
+  /**
+   * Convert a object to string data.
+   *
+   * @param valueObject object
+   * @return string data
+   */
   public <T> String convertString(T valueObject) {
     try {
       return objectMapper.writeValueAsString(valueObject);

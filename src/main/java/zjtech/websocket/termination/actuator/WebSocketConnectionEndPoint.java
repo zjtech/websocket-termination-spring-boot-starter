@@ -29,7 +29,7 @@ public class WebSocketConnectionEndPoint {
     Map<String, Object> map = new HashMap<>();
     map.put("activeSessionCount", sessionList.size());
     map.put("activeSessions", sessionHolder.getSessionList());
-    map.put("mapping", mappingHandler.getMapingInfo());
+    map.put("mapping", mappingHandler.getMappingInfo());
     return map;
   }
 }

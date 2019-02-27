@@ -17,6 +17,11 @@ public class PingPongHandler {
     this.configProps = configProps;
   }
 
+  /**
+   * Asynchronously handle PING/PONG message.
+   *
+   * @param sessionHandler SessionHandler
+   */
   public void asyncHandle(SessionHandler sessionHandler) {
     if (!configProps.getPing().isEnabled()) {
       log.info("The PING/PONG messages are not enabled.");

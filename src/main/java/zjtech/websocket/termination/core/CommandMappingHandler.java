@@ -1,7 +1,6 @@
 package zjtech.websocket.termination.core;
 
 import java.lang.annotation.Annotation;
-import java.lang.invoke.MethodHandles;
 import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.HashMap;
@@ -27,7 +26,7 @@ import zjtech.websocket.termination.config.WsConnectionConfigProps;
 public class CommandMappingHandler implements ApplicationContextAware {
 
   private final WsConnectionConfigProps configProps;
-  private Map<String, Class> comandMap = new HashMap<>(); // command <---> BaseRequest
+  private Map<String, Class> comandMap = new HashMap<>(); // command <---> Request
   private Map<String, ConsumerInfo> consumerMap = new HashMap<>();
   private ApplicationContext context;
 
@@ -111,7 +110,7 @@ public class CommandMappingHandler implements ApplicationContextAware {
   }
 
   /**
-   * Get entity class by command
+   * Get entity class by command.
    *
    * @param command Command
    * @return Class
@@ -125,7 +124,12 @@ public class CommandMappingHandler implements ApplicationContextAware {
     return consumerMap.get(type);
   }
 
-  public Map<String, Object> getMapingInfo() {
+  /**
+   * Get current mapping info.
+   *
+   * @return Mapping info
+   */
+  public Map<String, Object> getMappingInfo() {
     Map<String, Object> map = new HashMap<>();
     map.put("requestCommandMapping", Collections.unmodifiableMap(comandMap));
 

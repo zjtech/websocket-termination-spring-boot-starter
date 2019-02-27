@@ -22,7 +22,7 @@ public class CreatePolicyResponse extends BaseResponse {
     private long id;
     private String name;
     private String description;
-    private LocalDateTime createTime;
+    private String createTime;
     private String creater;
     private boolean validPolicy;
   }
