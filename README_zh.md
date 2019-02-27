@@ -54,7 +54,7 @@ websocket:
       api-package: sample.api
 ```
 | 配置项                                             |   默认值   |            描述                     |
-|---------------------------------------------------|:---------:|----------------------------------------------:|
+|:---------------------------------------------------|:---------:|:----------------------------------------------|
 | websocket.termination.enabled                     | true      | 是否启用WebSocket终结功能
 | websocket.termination.endpoint                    | /ws       | 客户端连接的端点，默认是 ws://IP:Port/ws                               |  
 | websocket.termination.order                       | -1        | 
