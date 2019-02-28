@@ -138,7 +138,7 @@ public class CreatePolicyResponse extends BaseResponse {
 }
 
 ```            
-* 客户端连接并发送请求      
+### 5. 客户端连接并发送请求      
 在完成以上步骤后，你需要一个Spring boot 的启动类。启动后，webSocket功能会被启用，而且可以将CreatePolicyRequest请求交由RestMessageForwarder类处理。
 客户端的请求对象为      
 ```
@@ -150,3 +150,46 @@ public class CreatePolicyResponse extends BaseResponse {
 }
 ```
 如果使用的是基于java的webScoket客户端，可以在客户端发送一个zjtech.websocket.termination.common.RequestWrapper对象                                                                                                   
+
+* 以下是一个WebSocket Client的例子：
+```
+public class JavaClient {
+
+  @Test
+  public void runClient() {
+    ObjectMapper objectMapper = new ObjectMapper();
+
+    CreatePolicyRequest request = new CreatePolicyRequest();
+    request.setName("policy");
+
+    RequestWrapper<CreatePolicyRequest> requestWrapper = new RequestWrapper<>();
+    requestWrapper.setPayload(request);
+    requestWrapper.setCommand("CREATE_POLICY");
+    //    requestWrapper.setHeader();
+
+    WebSocketClient client = new ReactorNettyWebSocketClient();
+    client
+        .execute(
+            URI.create("ws://localhost:5809/ws"),
+            session -> {
+              try {
+                return session
+                    .send(
+                        Mono.just(
+                            session.textMessage(objectMapper.writeValueAsString(requestWrapper))))
+                    .thenMany(session.receive().map(WebSocketMessage::getPayloadAsText).log())
+                    .then();
+              } catch (JsonProcessingException e) {
+                e.printStackTrace();
+                return Mono.empty();
+              }
+            })
+        .block(Duration.ofSeconds(10L));
+  }
+}
+```
+当发送了CREATE_POLICY请求后，会将服务端的响应结果在日志中显示：
+```
+11:16:24.492 [reactor-http-epoll-4] INFO reactor.Flux.Map.1 - onNext({"errorCode":201,"errorMessage":"A policy is created successfully.","command":"CREATE_POLICY_RESPONSE","payload":{"id":11223344,"name":"policy1","description":"a policy created in backend service","createTime":"2019-02-28 11:16:24","creater":"admin","validPolicy":true}})
+```
+
