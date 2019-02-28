@@ -140,7 +140,7 @@ public class CreatePolicyResponse extends BaseResponse {
 ```            
 ### 5. 客户端连接并发送请求      
 在完成以上步骤后，你需要一个Spring boot 的启动类。启动后，webSocket功能会被启用，而且可以将CreatePolicyRequest请求交由RestMessageForwarder类处理。
-客户端的请求对象为      
+**注意: 客户端的请求对象必须为RequestWrapper**
 ```
 {
   "command": "CREATE_POLICY",
