@@ -10,7 +10,7 @@ import zjtech.websocket.termination.core.ISessionHolder;
 import zjtech.websocket.termination.core.SessionHandler;
 
 @Component
-@WebEndpoint(id = "websocketMessage")
+@WebEndpoint(id = "websocketOperation")
 public class WebSocketMessageEndPoint {
 
   private final ISessionHolder sessionHolder;

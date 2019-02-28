@@ -1,5 +1,5 @@
 ### websocket-termination-spring-boot-starter
-## Websocket终结
+## Websocket的终结
 
 如果你的应用是一个websocket的服务端，你需要在收到一个websocket消息时，将该消息传递到后端的服务。可是很不幸的是后端的服务提供的是Restful API, 此时你需要在websocket 服务端先将websocket终结掉，然后将请求转发到后端的Restful服务。此时你可以使用这个项目。
 
@@ -195,3 +195,12 @@ public class JavaClient {
 * 浏览器WebSocket客户端    
 这里使用了chrome浏览器上的插件"Simple Web Socket Client", 演示客户端发送消息，并且消息会传递到消费者中处理，同时返回结果给客户端。   
 ![Web Browser Client](https://github.com/zjtech/websocket-termination-spring-boot-starter/blob/master/browser_client.gif)
+
+## 进阶   
+以下部分会介绍其他特性，也许你会感兴趣。   
+* Actuator Endpoint   
+当工程中添加了依赖org.springframework.boot:spring-boot-starter-actuator后有两个endpoint.    
+| 配置项                                    |            描述                                                      |
+|:-----------------------------------------|:--------------------------------------------------------------------|
+| /actuator/websocketInfo                  | 显示当前框架内部的Mapping关系和连接的客户端信息<br/>activeSessionCount: 当前活跃中的Session数<br/>activeSessions:  列表显示每个Session相关的sessionId以及客户端的IP地址信息<br/>mapping： 显示Request和MessageConsumer的映射关系                        |
+| /actuator/websocketOperation             | 客户端连接的端点，默认是 ws://IP:Port/ws                                 |                                                     |
