@@ -116,7 +116,7 @@ public class RestMessageForwarder {
 ```
 @Getter
 @Setter
-public class CreatePolicyResponse extends BaseResponse {
+public class CreatePolicyResponse implements BaseResponse {
 
   private int errorCode = 200;
   private String errorMessage;
@@ -192,4 +192,6 @@ public class JavaClient {
 ```
 11:16:24.492 [reactor-http-epoll-4] INFO reactor.Flux.Map.1 - onNext({"errorCode":201,"errorMessage":"A policy is created successfully.","command":"CREATE_POLICY_RESPONSE","payload":{"id":11223344,"name":"policy1","description":"a policy created in backend service","createTime":"2019-02-28 11:16:24","creater":"admin","validPolicy":true}})
 ```
-
+* 浏览器WebSocket客户端    
+这里使用了chrome浏览器上的插件"Simple Web Socket Client", 演示客户端发送消息，并且消息会传递到消费者中处理，同时返回结果给客户端。   
+![Web Browser Client]()
