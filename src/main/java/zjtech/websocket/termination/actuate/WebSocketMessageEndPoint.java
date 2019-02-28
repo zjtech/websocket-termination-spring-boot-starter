@@ -1,43 +1,57 @@
 package zjtech.websocket.termination.actuate;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.actuate.endpoint.annotation.DeleteOperation;
-import org.springframework.boot.actuate.endpoint.annotation.Selector;
-import org.springframework.boot.actuate.endpoint.annotation.WriteOperation;
-import org.springframework.boot.actuate.endpoint.web.annotation.WebEndpoint;
-import org.springframework.stereotype.Component;
+import org.springframework.boot.actuate.endpoint.web.annotation.RestControllerEndpoint;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import zjtech.websocket.termination.core.ISessionHolder;
 import zjtech.websocket.termination.core.SessionHandler;
 
-@Component
-@WebEndpoint(id = "websocketOperation")
+@RestControllerEndpoint(id = "websocketOperation")
 public class WebSocketMessageEndPoint {
 
   private final ISessionHolder sessionHolder;
 
-  @Autowired
   public WebSocketMessageEndPoint(ISessionHolder sessionHolder) {
     this.sessionHolder = sessionHolder;
   }
 
-  @WriteOperation
-  public String sendMessageToClient(@Selector String sessionId, String message) {
+  /**
+   * Send a text message to client.
+   *
+   * @param sessionId WebSocketSession ID
+   * @param message text message
+   * @return ResponseEntity
+   */
+  @PostMapping("/{sessionId}")
+  public ResponseEntity sendMessageToClient(
+      @PathVariable("sessionId") String sessionId, @RequestParam String message) {
     SessionHandler sessionHandler = sessionHolder.getSessionHandler(sessionId);
     if (sessionHandler == null) {
-      return String.format("The session '%s' doesn't exist.", sessionId);
+      return ResponseEntity.status(HttpStatus.NOT_FOUND)
+          .body(String.format("The session '%s' doesn't exist.", sessionId));
     }
 
     sessionHandler.sendText(message);
-    return "the message is sent successfully.";
+    return ResponseEntity.ok().build();
   }
 
-  @DeleteOperation
-  public String deleteSession(@Selector String sessionId) {
+  /**
+   * Remove a WebSocketSession by session id.
+   *
+   * @param sessionId WebSocketSession ID
+   * @return ResponseEntity
+   */
+  @PostMapping("/{sessionId}")
+  public ResponseEntity closeSession(@PathVariable("sessionId") String sessionId) {
     SessionHandler sessionHandler = sessionHolder.remove(sessionId);
     if (sessionHandler == null) {
-      return String.format("The session '%s' doesn't exist.", sessionId);
+      return ResponseEntity.status(HttpStatus.NOT_FOUND)
+          .body(String.format("The session '%s' doesn't exist.", sessionId));
     }
     sessionHandler.close();
-    return String.format("The session '%s' is closed ", sessionId);
+    return ResponseEntity.ok().build();
   }
 }
