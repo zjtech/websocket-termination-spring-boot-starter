@@ -1,13 +1,12 @@
 package sample.api;
 
-import java.time.LocalDateTime;
 import lombok.Getter;
 import lombok.Setter;
-import zjtech.websocket.termination.api.BaseResponse;
+import zjtech.websocket.termination.api.Response;
 
 @Getter
 @Setter
-public class CreatePolicyResponse extends BaseResponse {
+public class CreatePolicyResponse implements Response {
 
   private int errorCode = 200;
   private String errorMessage;

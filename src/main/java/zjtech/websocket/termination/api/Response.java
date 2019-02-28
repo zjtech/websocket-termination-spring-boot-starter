@@ -1,3 +1,3 @@
 package zjtech.websocket.termination.api;
 
-public class BaseResponse {}
+public interface Response {}

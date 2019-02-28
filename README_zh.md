@@ -111,4 +111,30 @@ public class RestMessageForwarder {
     ctx.getSessionHandler().sendJsonString(response);
   }
 }
-```                                                                                                                               
+```       
+你可以自定义一个Response类，也可以实现框架中提供的Response接口。以上使用的CreatePolicyResponse即为自定义实现了Response接口的类，你可以按需添加对应业务场景的属性。         
+```
+@Getter
+@Setter
+public class CreatePolicyResponse extends BaseResponse {
+
+  private int errorCode = 200;
+  private String errorMessage;
+  private String command;
+
+  private Payload payload = new Payload();
+
+  @Getter
+  @Setter
+  public static class Payload {
+
+    private long id;
+    private String name;
+    private String description;
+    private String createTime;
+    private String creater;
+    private boolean validPolicy;
+  }
+}
+
+```                                                                                                               
