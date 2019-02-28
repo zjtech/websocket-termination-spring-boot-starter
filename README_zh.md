@@ -201,7 +201,7 @@ public class JavaClient {
 * Actuator Endpoint   
 当工程中添加了依赖org.springframework.boot:spring-boot-starter-actuator后有两个endpoint.     
  
-| 配置项                                    |            描述                                                      |
+|                 End Point                |            描述                                                      |
 |:-----------------------------------------|:--------------------------------------------------------------------|
 | /actuator/websocketInfo                  | 显示当前框架内部的Mapping关系和连接的客户端信息<br/>activeSessionCount: 当前活跃中的Session数<br/>activeSessions:  列表显示每个Session相关的sessionId以及客户端的IP地址信息<br/>mapping： 显示Request和MessageConsumer的映射关系                        |
 | /actuator/websocketOperation/{sessionId} | POST /actuator/websocketOperation/{sessionId}?message=a%20message : <br/>调用此接口向客户端发送通知消息<br/>DELETE /actuator/websocketOperation/{sessionId} : <br/>根据session id在WebSocket 服务端关闭与客户端的连接</br/>             |                                                                           |
