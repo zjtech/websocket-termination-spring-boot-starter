@@ -24,6 +24,7 @@ import org.springframework.web.reactive.socket.server.support.WebSocketHandlerAd
 import reactor.core.publisher.EmitterProcessor;
 import reactor.core.scheduler.Schedulers;
 import zjtech.websocket.termination.actuate.WebSocketConnectionEndPoint;
+import zjtech.websocket.termination.actuate.WebSocketMessageEndPoint;
 import zjtech.websocket.termination.common.Constants;
 import zjtech.websocket.termination.common.Constants.BeanName;
 import zjtech.websocket.termination.common.WsUtils;
@@ -195,5 +196,12 @@ public class WsConnectionAutoConfigure {
   public WebSocketConnectionEndPoint webSocketConnectionEndPoint(
       CommandMappingHandler mappingHandler, ISessionHolder sessionHolder) {
     return new WebSocketConnectionEndPoint(sessionHolder, mappingHandler);
+  }
+
+  @Bean
+  @ConditionalOnEnabledEndpoint
+  public WebSocketMessageEndPoint webSocketMessageEndPoint(
+      CommandMappingHandler mappingHandler, ISessionHolder sessionHolder) {
+    return new WebSocketMessageEndPoint(sessionHolder);
   }
 }
