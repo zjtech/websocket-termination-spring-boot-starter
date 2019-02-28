@@ -48,8 +48,8 @@ dependencies {
   compile "org.springframework.boot:spring-boot-starter-webflux:${springBootVersion}"
 
   //mark this dependency as compileOnly, the actuator endpoints will be enabled if the actuator dependency is added
-//  compileOnly "org.springframework.boot:spring-boot-starter-actuator:${springBootVersion}"
-  compile "org.springframework.boot:spring-boot-starter-actuator:${springBootVersion}"
+  compileOnly "org.springframework.boot:spring-boot-starter-actuator:${springBootVersion}"
+//  compile "org.springframework.boot:spring-boot-starter-actuator:${springBootVersion}"
 
   testCompile "org.springframework.boot:spring-boot-starter-test:${springBootVersion}"
 }

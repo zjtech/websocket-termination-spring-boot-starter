@@ -5,7 +5,7 @@
 
 ## 这个starter是否适合我的项目？    
 你可以考虑是否需要这些功能：    
-* 这个项目是基于Spring boot2和webflux的实现
+* 这个项目是基于Spring boot2 **(2.1.1.RELEASE 及以上版本)** 和webflux的实现
 * 我需要在websocket服务端收到请求后随后调用后端的服务并返回处理结果, 这个服务可能只提供了Restful API或只能消费MQ消息    
 * 后端的Restful服务可以调用websocket服务端的actuator endpoint，基于Restful API的方式反向下发通知给websocket客户端       
 * websocket服务端提供PING/PONG功能，当客户端连接后通过PING/PONG维持心跳 
