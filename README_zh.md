@@ -112,7 +112,7 @@ public class RestMessageForwarder {
   }
 }
 ```       
-你可以自定义一个Response类，也可以实现框架中提供的Response接口。以上使用的CreatePolicyResponse即为自定义实现了Response接口的类，你可以按需添加对应业务场景的属性。         
+你可以自定义一个Response类，也可以实现框架中提供的Response接口。上面使用的CreatePolicyResponse即为自定义实现了Response接口的类，你可以按需添加对应业务场景的属性。         
 ```
 @Getter
 @Setter
@@ -137,4 +137,16 @@ public class CreatePolicyResponse extends BaseResponse {
   }
 }
 
-```                                                                                                               
+```            
+* 客户端连接并发送请求      
+在完成以上步骤后，你需要一个Spring boot 的启动类。启动后，webSocket功能会被启用，而且可以将CreatePolicyRequest请求交由RestMessageForwarder类处理。
+客户端的请求对象为      
+```
+{
+  "command": "CREATE_POLICY",
+  "payload": {
+          "name": "policy1"
+       }
+}
+```
+如果使用的是基于java的webScoket客户端，可以在客户端发送一个zjtech.websocket.termination.common.RequestWrapper对象                                                                                                   
