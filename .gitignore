@@ -151,3 +151,4 @@ local.properties
 .worksheet
 
 /lombok.config
+!/gradle.properties

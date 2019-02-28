@@ -102,35 +102,36 @@ publishing {
     }
   }
 }
-// todo : https://github.com/bintray/gradle-bintray-plugin
-/*
+
 bintray {
-  user = properties.getProperty("bintray.user")
-  key = properties.getProperty("bintray.key")
+//  user = properties.getProperty("bintray.user")
+//  key = properties.getProperty("bintray.key")
+  user = "jeven2016"
+  key = "f5e79e418be035ef76083637a814319960a7b9f8"
   publications = ['mavenJava']
   publish = true
   pkg {
     repo = 'maven'
     name = project.name
     desc = project.description
-    userOrg = 'web3j'
+    userOrg = 'zjtech'
     licenses = ['Apache-2.0']
-    issueTrackerUrl = 'https://github.com/web3j/web3j-spring-boot-starter/issues'
-    vcsUrl = 'https://github.com/web3j/web3j-spring-boot-starter.git'
-    websiteUrl = 'https://web3j.io'
+    issueTrackerUrl = 'https://github.com/zjtech/websocket-termination-spring-boot-starter/issues'
+    vcsUrl = 'https://github.com/zjtech/websocket-termination-spring-boot-starter.git'
+    websiteUrl = 'http://jujucom.cn'
     publicDownloadNumbers = true
-    version {
-      gpg {
-        sign = true
-        passphrase = bintrayGpgPassphrase
-      }
-      mavenCentralSync {
-        sync = true
-        user = ossrhUsername
-        password = ossrhPassword
-        close = '1'
-      }
-    }
+//    version {
+//      gpg {
+//        sign = true
+//        passphrase = bintrayGpgPassphrase
+//      }
+//      mavenCentralSync {
+//        sync = true
+//        user = ossrhUsername
+//        password = ossrhPassword
+//        close = '1'
+//      }
+//    }
   }
 
-}*/
+}
