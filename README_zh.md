@@ -194,4 +194,4 @@ public class JavaClient {
 ```
 * 浏览器WebSocket客户端    
 这里使用了chrome浏览器上的插件"Simple Web Socket Client", 演示客户端发送消息，并且消息会传递到消费者中处理，同时返回结果给客户端。   
-![Web Browser Client]()
+![Web Browser Client](https://github.com/zjtech/websocket-termination-spring-boot-starter/blob/master/sample.png)
