@@ -84,7 +84,8 @@ public class MessageHandler {
       log.warn(
           "Received a unknown message from client '{}' and the message is '{}'",
           sessionHandler.getClientInfo(),
-          receivedMessage);
+          receivedMessage,
+          ((WsConnectionException) throwable).getRawException());
 
       WsErrorCode errorCode = ((WsConnectionException) throwable).getErrorCode();
       errorResponse.setErrorCode(400);

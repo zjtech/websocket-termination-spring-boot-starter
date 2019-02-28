@@ -1,5 +1,6 @@
 package zjtech.websocket.termination.config;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.HashMap;
 import java.util.Map;
@@ -59,7 +60,10 @@ public class WsConnectionAutoConfigure {
   @ConditionalOnMissingBean
   public ObjectMapper objectMapper() {
     log.debug("Init a default ObjectMapper");
-    return new ObjectMapper();
+    // ignore unrecognized fields
+    ObjectMapper objectMapper = new ObjectMapper();
+    objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+    return objectMapper;
   }
 
   @Bean

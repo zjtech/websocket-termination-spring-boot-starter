@@ -109,7 +109,17 @@ public class SessionHandler {
    */
   public void sendJsonString(Object messageObj) {
     String textMessage = wsUtils.convertString(messageObj);
-    sendText(textMessage);
+    sendText(textMessage, session);
+  }
+
+  /**
+   * Send a object in json format.
+   *
+   * @param messageObj Object
+   */
+  public void sendJsonString(Object messageObj, WebSocketSession customSession) {
+    String textMessage = wsUtils.convertString(messageObj);
+    sendText(textMessage, customSession);
   }
 
   /**
@@ -118,7 +128,16 @@ public class SessionHandler {
    * @param message string
    */
   public void sendText(String message) {
-    send(session.textMessage(message));
+    send(session.textMessage(message), session);
+  }
+
+  /**
+   * Send a string to client.
+   *
+   * @param message string
+   */
+  public void sendText(String message, WebSocketSession webSocketSession) {
+    send(webSocketSession.textMessage(message), webSocketSession);
   }
 
   /**
@@ -127,8 +146,17 @@ public class SessionHandler {
    * @param msg WebSocketMessage
    */
   public void send(WebSocketMessage msg) {
+    this.send(msg, session);
+  }
+
+  /**
+   * Send the raw websocket message.
+   *
+   * @param msg WebSocketMessage
+   */
+  public void send(WebSocketMessage msg, WebSocketSession webSocketSession) {
     if (isConnected) {
-      session
+      webSocketSession
           .send(Mono.just(msg))
           .doOnError(
               throwable -> {
@@ -157,9 +185,7 @@ public class SessionHandler {
     return pongMessageProcessor;
   }
 
-  /**
-   * Blocking close for a websocket session.
-   */
+  /** Blocking close for a websocket session. */
   public void close() {
     if (isConnected) {
       log.info("Trying to close termination for client ''", clientInfo);

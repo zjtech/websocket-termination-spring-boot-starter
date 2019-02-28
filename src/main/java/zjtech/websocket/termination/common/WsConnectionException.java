@@ -3,7 +3,6 @@ package zjtech.websocket.termination.common;
 public class WsConnectionException extends RuntimeException {
 
   private Throwable rawException;
-  private String errorMessage;
   private WsErrorCode errorCode;
 
   public WsConnectionException(WsErrorCode errorCode) {
