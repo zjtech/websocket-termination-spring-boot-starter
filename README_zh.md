@@ -23,12 +23,12 @@
 ## 
 
 ## 如何开发
-* 添加依赖    
+#### 1. 添加依赖    
 对于gradle, 可以添加如下依赖
 ```   
 compile "zjtech:websocket-termination-spring-boot-starter:0.1"
 ```   
-* 在项目的配置文件中启用    
+#### 2. 在项目的配置文件中启用    
 ```
 websocket:
   termination:
@@ -38,7 +38,7 @@ websocket:
 ```
 ```api-package```指定了客户端与服务端WebSocket消息对象的存放路径
 
-完整的配置项如下所示:   
+##### 完整的配置项如下所示:   
 ```
 websocket:
   termination:
@@ -64,4 +64,51 @@ websocket:
 | websocket.termination.ping.supress-log            | true      | 是否打印PING发送和PONG接收的日志
 | websocket.termination.ping.scan.api-package       | <NA>      | 客户端与服务端通信的请求对象所处的包路径，需要开发人员自行指定，无默认值       |
 
-                                                                                                                                  
+### 3. 在sample.api包中添加自定义的请求对象        
+```
+@Getter
+@Setter
+@WebSocketCommand("CREATE_POLICY")
+public class CreatePolicyRequest implements Request {
+
+  private String name;
+  private String description;
+}
+```
+### 4. 定义一个可以处理该消息的类        
+```
+@Slf4j
+@Component
+@MessageConsumer
+public class RestMessageForwarder {
+
+  @Consume("CREATE_POLICY")
+  public void createPolicy(ConsumerContext<CreatePolicyRequest> ctx) {
+    //get the payload
+    CreatePolicyRequest request= ctx.getPayload();
+
+    // you can forward the payload to backend service
+    log.info("forward a CreatePolicyRequest to backend rest service.");
+
+    //then you construct a payload returned form backend service like this:
+    CreatePolicyResponse.Payload payload = new CreatePolicyResponse.Payload();
+    payload.setCreater("admin");
+    payload.setCreateTime(
+        LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss")));
+    payload.setDescription("a policy created in backend service");
+    payload.setId(11223344L);
+    payload.setName("policy1");
+    payload.setValidPolicy(true);
+
+    // and then construct and send a response to client
+    CreatePolicyResponse response = new CreatePolicyResponse();
+    response.setErrorCode(201);
+    response.setErrorMessage("A policy is created successfully.");
+    response.setCommand("CREATE_POLICY_RESPONSE");
+    response.setPayload(payload);
+
+    //send now
+    ctx.getSessionHandler().sendJsonString(response);
+  }
+}
+```                                                                                                                               
