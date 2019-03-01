@@ -196,6 +196,10 @@ public class JavaClient {
 这里使用了chrome浏览器上的插件"Simple Web Socket Client", 演示客户端发送消息，并且消息会传递到消费者中处理，同时返回结果给客户端。   
 ![Web Browser Client](https://github.com/zjtech/websocket-termination-spring-boot-starter/blob/master/browser_client.gif)
 
+## **Demo工程**
+这里提供了一个demo工程，你可以参考是如何实现一个WebSocket服务端，如何终结Websocket的。    
+https://github.com/zjtech/websocket-termination-demo  
+
 ## 进阶   
 以下部分会介绍其他特性，也许你会感兴趣。   
 * Actuator Endpoint   
