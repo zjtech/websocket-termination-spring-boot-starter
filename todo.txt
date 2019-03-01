@@ -1,5 +1,9 @@
-* no this file /classes/META-INF/spring-configuration-metadata.json
+
 
 Bugs:
 * multiple Session Holder  --- fixed
+* no this file /classes/META-INF/spring-configuration-metadata.json -- fixed
 * For pong, the pingCount wouldn't be reset in sessionHandler -- ready for test
+
+gradle build bintrayUpload --info
+gradle publish  ----> publish to maven repository

@@ -23,7 +23,7 @@ plugins {
 
   id "io.freefair.lombok" version "3.1.0"
 }
-
+apply plugin: 'maven-publish'
 ext {
   springBootVersion = '2.1.1.RELEASE'
 }
@@ -40,7 +40,7 @@ repositories {
 }
 
 dependencies {
-  compile "org.springframework.boot:spring-boot-autoconfigure:${springBootVersion}"
+  compileOnly "org.springframework.boot:spring-boot-autoconfigure:${springBootVersion}"
 
   /*With Gradle 4.6 and later, the dependency should be declared in the annotationProcessor configuration, as shown in the following example*/
   annotationProcessor "org.springframework.boot:spring-boot-configuration-processor:${springBootVersion}"
@@ -56,6 +56,7 @@ dependencies {
 task javadocJar(type: Jar) {
   from javadoc
 }
+javadoc.failOnError = false
 
 task sourcesJar(type: Jar) {
   from sourceSets.main.allSource
@@ -66,18 +67,22 @@ artifacts {
 }
 
 
+//define the artifacts we want to publish
 publishing {
   publications {
-    mavenJava(MavenPublication) {
+    maven(MavenPublication) {
       from components.java
 
       artifact sourcesJar {
         classifier 'sources'
       }
+      artifact javadocJar {
+        classifier "javadoc"
+      }
 
       pom {
         name = project.name
-        description = "Websocket termination mananger boot starter"
+        description = "Websocket termination spring boot starter"
         url = "https://github.com/zjtech/websocket-termination-spring-boot-starter"
 
         licenses {
@@ -101,14 +106,23 @@ publishing {
       }
     }
   }
+  //publish to private nexus repository
+//  repositories {
+//    maven {
+//      credentials {
+//        username = nexusUsername
+//        password = nexusPassword
+//      }
+//      url releaseUrl
+//    }
+//  }
 }
 
 bintray {
-//  user = properties.getProperty("bintray.user")
-//  key = properties.getProperty("bintray.key")
-  user = "jeven2016"
-  key = "f5e79e418be035ef76083637a814319960a7b9f8"
-  publications = ['mavenJava']
+  override = true  //override existing version
+  user = bintrayUser
+  key = bintrayKey
+  publications = ['maven'] //this should be consistent to "publishing.publications.maven"
   publish = true
   pkg {
     repo = 'maven'

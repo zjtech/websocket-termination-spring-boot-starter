@@ -152,3 +152,4 @@ local.properties
 
 /lombok.config
 !/gradle.properties
+/gradle.properties
