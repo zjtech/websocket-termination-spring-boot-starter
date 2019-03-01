@@ -200,7 +200,7 @@ public class JavaClient {
 这里提供了一个demo工程，你可以参考是如何实现一个WebSocket服务端，如何终结Websocket的。    
 https://github.com/zjtech/websocket-termination-demo  
 
-## 进阶   
+## 进阶    
 以下部分会介绍其他特性，也许你会感兴趣。   
 * Actuator Endpoint   
 当工程中添加了依赖org.springframework.boot:spring-boot-starter-actuator后有两个endpoint.     
