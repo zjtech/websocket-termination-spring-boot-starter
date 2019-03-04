@@ -1,19 +1,15 @@
 ### websocket-termination-spring-boot-starter
-[中文文档]()
-## Regarding Websocket Termination
-In case you have a websocket server, you need to pass the received websocket message to a backend service. 
-But unfortunately the backend service is a restful based service, and only the rest API can be invoked.
-Hence you have to terminate the websocket firstly in websocket server side and pass the request to the
-backend server. At this point, this spring boot starter is what you may need.
+## Websocket的终结
 
-## Is this starter suited for my project?   
-You could sonsider the following things:     
-* This boot starter project is based on Spring boot2 **(2.1.1.RELEASE and later)** with webflux
-* The websocket server should terminate the websocket message and invoke a backend service to get the result to client,
-regardless of the backend service is a restful based or message based service
-* The backend service could invoke the actuator API(Rest API) of upstream websocket server, to notify a websocket client.
-* The websocket server shall support sending or receiving PING/PONG frame in order to keep the connection alive
-* You may need to know how many connections established, the details of the websocket session and IP address for a specific websocket client   
+如果你的应用是一个websocket的服务端，你需要在收到一个websocket消息时，将该消息传递到后端的服务。可是很不幸的是后端的服务提供的是Restful API, 此时你需要在websocket 服务端先将websocket终结掉，然后将请求转发到后端的Restful服务。此时你可以使用这个项目。
+
+## 这个starter是否适合我的项目？    
+你可以考虑是否需要这些功能：    
+* 这个项目是基于Spring boot2 **(2.1.1.RELEASE 及以上版本)** 和webflux的实现
+* 我需要在websocket服务端收到请求后随后调用后端的服务并返回处理结果, 这个服务可能只提供了Restful API或只能消费MQ消息    
+* 后端的Restful服务可以调用websocket服务端的actuator endpoint，基于Restful API的方式反向下发通知给websocket客户端       
+* websocket服务端提供PING/PONG功能，当客户端连接后通过PING/PONG维持心跳 
+* 我需要知道当前有多少个客户端连接着，以及对应的session和IP地址    
 
 ##### 如果上述这些功能你恰好需要，那可以考虑这个基于spring boot2的无侵入式的boot start库依赖。    
 另外这个工程可以带给你额外的便利:  
