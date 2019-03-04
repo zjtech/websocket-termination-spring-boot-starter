@@ -107,15 +107,15 @@ publishing {
     }
   }
   //publish to private nexus repository
-  repositories {
-    maven {
-      credentials {
-        username = nexusUsername
-        password = nexusPassword
-      }
-      url releaseUrl
-    }
-  }
+//  repositories {
+//    maven {
+//      credentials {
+//        username = nexusUsername
+//        password = nexusPassword
+//      }
+//      url releaseUrl
+//    }
+//  }
 }
 
 bintray {
