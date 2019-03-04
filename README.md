@@ -218,5 +218,5 @@ After the dependency ```org.springframework.boot:spring-boot-starter-actuator```
  
 |                 End Point                |            Description     
 |:-----------------------------------------|:--------------------------------------------------------------------|
-| /actuator/websocketInfo                  | Show the internal mapping relationship and connected client info<br/>activeSessionCount: Current active session count<br/>activeSessions: list the sessionId and corresponding client IP address for each session <br/>mapping： Show the mapping relationship from ```Request``` to ```MessageConsumer```    |
+| /actuator/websocketInfo                  | GET /actuator/websocketInfo <br/>Show the internal mapping relationship and connected client info<br/>activeSessionCount: Current active session count<br/>activeSessions: list the sessionId and corresponding client IP address for each session <br/>mapping： Show the mapping relationship from ```Request``` to ```MessageConsumer```    |
 | /actuator/websocketOperation/{sessionId} | POST /actuator/websocketOperation/{sessionId}?message=a%20message : <br/>Call this API to send message to websocket client<br/>DELETE /actuator/websocketOperation/{sessionId} : <br/>Close and delete the client session by session id<br/>             |                                                                           |
