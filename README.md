@@ -73,7 +73,7 @@ A demo project is provided you may be interested in, you can clone this project 
 and how to terminate the websocket.
 https://github.com/zjtech/websocket-termination-demo  
 
-### 3. Create a customized request in a package "sample.api" 
+### 3. Create a customized request in a package "zjtech.sample.api" 
 This class should extend ```zjtech.websocket.termination.api.Request```      
 ```
 @Getter
@@ -85,7 +85,7 @@ public class CreatePolicyRequest implements Request {
   private String description;
 }
 ```
-### 4. 定义一个可以处理该消息的类        
+### 4. Define a class that can process the above request class        
 ```
 @Slf4j
 @Component
@@ -122,7 +122,9 @@ public class RestMessageForwarder {
   }
 }
 ```       
-你可以自定义一个Response类，也可以实现框架中提供的Response接口。上面使用的CreatePolicyResponse即为自定义实现了Response接口的类，你可以按需添加对应业务场景的属性。         
+Here you can customize a response class, or you can directly implement the ```zjtech.websocket.termination.api.Response``` interface.
+The CreatePolicyResponse class used above is a customized class to implement the Response interface, meanwhile you can 
+add corresponding fileds as your business needs.
 ```
 @Getter
 @Setter
@@ -148,20 +150,23 @@ public class CreatePolicyResponse implements BaseResponse {
 }
 
 ```            
-### 5. 客户端连接并发送请求      
-在完成以上步骤后，你需要一个Spring boot 的启动类。启动后，webSocket功能会被启用，而且可以将CreatePolicyRequest请求交由RestMessageForwarder类处理。
-**注意: 客户端的请求对象必须为RequestWrapper**
+### 5. The websocket client:
+After completed the above steps, you need to create a spring boot application class, once the server is started, the websocket function
+should be enabled in together. And the CreatePolicyRequest would be processed by RestMessageForwarder class.       
+**Note: The client should send the RequestWrapper class instead of CreatePolicyRequest**
+the format should looks like this:
 ```
 {
   "command": "CREATE_POLICY",
-  "payload": {
-          "name": "policy1"
+  "payload": {  
+          "name": "policy1"  // payload stores a Request, here it is  CreatePolicyRequest
        }
 }
 ```
+Which means the request client sent is to create a policy and the payload will be converted into CreatePolicyRequest.
 如果使用的是基于java的webScoket客户端，可以在客户端发送一个zjtech.websocket.termination.common.RequestWrapper对象                                                                                                   
 
-* 以下是一个WebSocket Client的例子：
+* The following is a sample of WebSocket Client：
 ```
 public class JavaClient {
 
@@ -198,20 +203,21 @@ public class JavaClient {
   }
 }
 ```
-当发送了CREATE_POLICY请求后，会将服务端的响应结果在日志中显示：
+The server log will indicates the following line after the CREATE_POLICY request is sent:
 ```
 11:16:24.492 [reactor-http-epoll-4] INFO reactor.Flux.Map.1 - onNext({"errorCode":201,"errorMessage":"A policy is created successfully.","command":"CREATE_POLICY_RESPONSE","payload":{"id":11223344,"name":"policy1","description":"a policy created in backend service","createTime":"2019-02-28 11:16:24","creater":"admin","validPolicy":true}})
 ```
-* 浏览器WebSocket客户端    
-这里使用了chrome浏览器上的插件"Simple Web Socket Client", 演示客户端发送消息，并且消息会传递到消费者中处理，同时返回结果给客户端。   
+* The web browser's websocket client    
+Here a chrome plugin "Simple Web Socket Client" is used to illustrate the client can send a websocket message to server side,
+and then the message will be passed into consumer class, and finally print the result in GUI.
 ![Web Browser Client](https://github.com/zjtech/websocket-termination-spring-boot-starter/blob/master/browser_client.gif)
 
-## 进阶    
-以下部分会介绍其他特性，也许你会感兴趣。   
+## Advanced   
+Other features you may be interested in     
 * Actuator Endpoint   
-当工程中添加了依赖org.springframework.boot:spring-boot-starter-actuator后有两个endpoint.     
+After the dependency ```org.springframework.boot:spring-boot-starter-actuator``` is added, there're two actuator endpoints are enabled.
  
-|                 End Point                |            描述                                                      |
+|                 End Point                |            Description                                                      |
 |:-----------------------------------------|:--------------------------------------------------------------------|
 | /actuator/websocketInfo                  | 显示当前框架内部的Mapping关系和连接的客户端信息<br/>activeSessionCount: 当前活跃中的Session数<br/>activeSessions:  列表显示每个Session相关的sessionId以及客户端的IP地址信息<br/>mapping： 显示Request和MessageConsumer的映射关系                        |
 | /actuator/websocketOperation/{sessionId} | POST /actuator/websocketOperation/{sessionId}?message=a%20message : <br/>调用此接口向客户端发送通知消息<br/>DELETE /actuator/websocketOperation/{sessionId} : <br/>根据session id在WebSocket 服务端关闭与客户端的Session<br/>             |                                                                           |

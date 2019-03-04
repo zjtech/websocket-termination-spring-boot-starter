@@ -113,7 +113,8 @@ public class RestMessageForwarder {
   }
 }
 ```       
-你可以自定义一个Response类，也可以实现框架中提供的Response接口。上面使用的CreatePolicyResponse即为自定义实现了Response接口的类，你可以按需添加对应业务场景的属性。         
+你可以自定义一个Response类，也可以实现框架中提供的Response接口。上面使用的CreatePolicyResponse即为自定义实现了Response接口的类，
+你可以按需添加对应业务的属性。         
 ```
 @Getter
 @Setter
