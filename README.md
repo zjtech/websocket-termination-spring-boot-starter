@@ -164,7 +164,6 @@ the format should looks like this:
 }
 ```
 Which means the request client sent is to create a policy and the payload will be converted into CreatePolicyRequest.
-如果使用的是基于java的webScoket客户端，可以在客户端发送一个zjtech.websocket.termination.common.RequestWrapper对象                                                                                                   
 
 * The following is a sample of WebSocket Client：
 ```
@@ -217,7 +216,7 @@ Other features you may be interested in
 * Actuator Endpoint   
 After the dependency ```org.springframework.boot:spring-boot-starter-actuator``` is added, there're two actuator endpoints are enabled.
  
-|                 End Point                |            Description                                                      |
+|                 End Point                |            Description     
 |:-----------------------------------------|:--------------------------------------------------------------------|
-| /actuator/websocketInfo                  | 显示当前框架内部的Mapping关系和连接的客户端信息<br/>activeSessionCount: 当前活跃中的Session数<br/>activeSessions:  列表显示每个Session相关的sessionId以及客户端的IP地址信息<br/>mapping： 显示Request和MessageConsumer的映射关系                        |
-| /actuator/websocketOperation/{sessionId} | POST /actuator/websocketOperation/{sessionId}?message=a%20message : <br/>调用此接口向客户端发送通知消息<br/>DELETE /actuator/websocketOperation/{sessionId} : <br/>根据session id在WebSocket 服务端关闭与客户端的Session<br/>             |                                                                           |
+| /actuator/websocketInfo                  | Show the internal mapping relationship and connected client info<br/>activeSessionCount: Current active session count<br/>activeSessions: list the sessionId and corresponding client IP address for each session <br/>mapping： Show the mapping relationship from ```Request``` to ```MessageConsumer```    |
+| /actuator/websocketOperation/{sessionId} | POST /actuator/websocketOperation/{sessionId}?message=a%20message : <br/>Call this API to send message to websocket client<br/>DELETE /actuator/websocketOperation/{sessionId} : <br/>Close and delete the client session by session id<br/>             |                                                                           |
