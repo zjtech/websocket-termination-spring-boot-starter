@@ -15,24 +15,24 @@ regardless of the backend service is a restful based or message based service
 * The websocket server shall support sending or receiving PING/PONG frame in order to keep the connection alive
 * You may need to know how many connections established, the details of the websocket session and IP address for a specific websocket client   
 
-##### 如果上述这些功能你恰好需要，那可以考虑这个基于spring boot2的无侵入式的boot start库依赖。    
-另外这个工程可以带给你额外的便利:  
-* 你仅需要提供一个请求对象，并定义一个处理该对象的类    
-那么你就可以很方便的获得客服端发送过来的请求，并且该框架将会把这个对象转到你的消费类中进行处理，很方便。
+##### If all of these features is what you need, you can consider using this non-intrusive and spring boot2 based dependency    
+With this start, all you need to do is: 
+* You need to define a websocket request and a class to process this request working as a consumer              
+Thus you can conveniently get the client request,  and the starter can ensure the request is passed into your consumer class.
+Very convenient, right?
                                                                                                                           
   
-## 一种可能的应用场景示例
+## A possible usage scenario
 ![PIC](https://github.com/zjtech/websocket-termination-spring-boot-starter/blob/master/sample.png)   
 
-## 
 
-## 如何开发
-#### 1. 添加依赖    
-对于gradle, 可以添加如下依赖
+## How to develop
+#### 1. Add this dependency
+For gradle, you can add the dependency like this:    
 ```   
 compile "zjtech:websocket-termination-spring-boot-starter:0.1"
 ```   
-#### 2. 在项目的配置文件中启用    
+#### 2. Enable the webdocket termination function in project's configuration file  
 ```
 websocket:
   termination:
@@ -40,9 +40,9 @@ websocket:
       api-package: sample.api   
 
 ```
-```api-package```指定了客户端与服务端WebSocket消息对象的存放路径
+```api-package```this parameter specify what package the webscoket request classes are placed in 
 
-##### 完整的配置项如下所示:   
+##### The complete configuration, as follows:  
 ```
 websocket:
   termination:
@@ -57,18 +57,24 @@ websocket:
     scan:
       api-package: sample.api
 ```
-| 配置项                                             |   默认值   |            描述                     |
+| Configuration Item                                | Default Value |            Description                    |
 |:---------------------------------------------------|:---------:|:----------------------------------------------|
-| websocket.termination.enabled                     | true      | 是否启用WebSocket终结功能
-| websocket.termination.endpoint                    | /ws       | 客户端连接的端点，默认是 ws://IP:Port/ws                               |  
-| websocket.termination.order                       | -1        | 
-| websocket.termination.ping.enabled                | true      | 启用PING/PONG                                                        |
-| websocket.termination.ping.interval               | 10        | 单位秒，每隔多少秒服务端向客户端发送一次PING报文                           |
-| websocket.termination.ping.retries                | 3         | 当服务端发送了PING后，无法收到客户端的响应，最多尝试几次。并最终关闭session。 | 
-| websocket.termination.ping.supress-log            | true      | 是否打印PING发送和PONG接收的日志
-| websocket.termination.ping.scan.api-package       | <NA>      | 客户端与服务端通信的请求对象所处的包路径，需要开发人员自行指定，无默认值       |
+| websocket.termination.enabled                     | true      | Enable WebSocket termination
+| websocket.termination.endpoint                    | /ws       | The actuator endpoing. By default, the value is ws://IP:Port/ws        |  
+| websocket.termination.order                       | -1        | The sort order for websocket handler mapping
+| websocket.termination.ping.enabled                | true      | Enable PING/PONG                                                        |
+| websocket.termination.ping.interval               | 10        | In seconds，to specify how oftern the server should send a PING frame to client  |
+| websocket.termination.ping.retries                | 3         | The retry count while server cannot get response from client ,and finally close the session| 
+| websocket.termination.ping.supress-log            | true      | Whether print the PING/PONG log                                        |
+| websocket.termination.ping.scan.api-package       | <NA>      | The package that webscoket request classes are placed in.<br/> NA, **but the developer should specify this package**.|
 
-### 3. 在sample.api包中添加自定义的请求对象        
+## A sample project for reference
+A demo project is provided you may be interested in, you can clone this project to learn how to implement a websocket server,
+and how to terminate the websocket.
+https://github.com/zjtech/websocket-termination-demo  
+
+### 3. Create a customized request in a package "sample.api" 
+This class should extend ```zjtech.websocket.termination.api.Request```      
 ```
 @Getter
 @Setter
@@ -199,10 +205,6 @@ public class JavaClient {
 * 浏览器WebSocket客户端    
 这里使用了chrome浏览器上的插件"Simple Web Socket Client", 演示客户端发送消息，并且消息会传递到消费者中处理，同时返回结果给客户端。   
 ![Web Browser Client](https://github.com/zjtech/websocket-termination-spring-boot-starter/blob/master/browser_client.gif)
-
-## **Demo工程**
-这里提供了一个demo工程，你可以参考是如何实现一个WebSocket服务端，如何终结Websocket的。    
-https://github.com/zjtech/websocket-termination-demo  
 
 ## 进阶    
 以下部分会介绍其他特性，也许你会感兴趣。   

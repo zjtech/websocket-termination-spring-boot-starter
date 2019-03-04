@@ -6,15 +6,15 @@
 ## 这个starter是否适合我的项目？    
 你可以考虑是否需要这些功能：    
 * 这个项目是基于Spring boot2 **(2.1.1.RELEASE 及以上版本)** 和webflux的实现
-* 我需要在websocket服务端收到请求后随后调用后端的服务并返回处理结果, 这个服务可能只提供了Restful API或只能消费MQ消息    
+* Websocket服务端收到请求后调用后端的服务并返回处理结果, 这个服务可能只提供了Restful API或只能消费MQ消息    
 * 后端的Restful服务可以调用websocket服务端的actuator endpoint，基于Restful API的方式反向下发通知给websocket客户端       
 * websocket服务端提供PING/PONG功能，当客户端连接后通过PING/PONG维持心跳 
 * 我需要知道当前有多少个客户端连接着，以及对应的session和IP地址    
 
 ##### 如果上述这些功能你恰好需要，那可以考虑这个基于spring boot2的无侵入式的boot start库依赖。    
-另外这个工程可以带给你额外的便利:  
-* 你仅需要提供一个请求对象，并定义一个处理该对象的类    
-那么你就可以很方便的获得客服端发送过来的请求，并且该框架将会把这个对象转到你的消费类中进行处理，很方便。
+有了这个starter,你需要做的仅仅是:  
+**你仅需要提供一个请求对象，并定义一个处理该对象的类**      
+那么你就可以很方便的获得客服端发送过来的请求，并且该框架将会把这个对象转到你的消费类中进行处理。很方便,是吧?
                                                                                                                           
   
 ## 一种可能的应用场景示例
@@ -64,7 +64,8 @@ websocket:
 | websocket.termination.ping.supress-log            | true      | 是否打印PING发送和PONG接收的日志
 | websocket.termination.ping.scan.api-package       | <NA>      | 客户端与服务端通信的请求对象所处的包路径，需要开发人员自行指定，无默认值       |
 
-### 3. 在sample.api包中添加自定义的请求对象        
+### 3. 在sample.api包中添加自定义的请求对象  
+这个类要继承```zjtech.websocket.termination.api.Request```类           
 ```
 @Getter
 @Setter
