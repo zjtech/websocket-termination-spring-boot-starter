@@ -159,7 +159,7 @@ the format should looks like this:
 {
   "command": "CREATE_POLICY",
   "payload": {  
-          "name": "policy1"  // payload stores a Request, here it is  CreatePolicyRequest
+          "name": "policy1"  // payload stands for a Request, here it is  CreatePolicyRequest
        }
 }
 ```
