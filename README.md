@@ -15,7 +15,7 @@ regardless of the backend service is a restful based or message based service
 * The websocket server shall support sending or receiving PING/PONG frame in order to keep the connection alive
 * You may need to know how many connections established, the details of the websocket session and IP address for a specific websocket client   
 
-##### If all of these features is what you need, you can consider using this non-intrusive and spring boot2 based dependency    
+##### If all of these features are what you need, you can consider using this non-intrusive and spring boot2 based dependency    
 With this start, all you need to do is: 
 * You need to define a websocket request and a class to process this request working as a consumer              
 Thus you can conveniently get the client request,  and the starter can ensure the request is passed into your consumer class.
@@ -32,7 +32,7 @@ For gradle, you can add the dependency like this:
 ```   
 compile "zjtech:websocket-termination-spring-boot-starter:0.1"
 ```   
-#### 2. Enable the webdocket termination function in project's configuration file  
+#### 2. Enable the websocket termination function in project's configuration file  
 ```
 websocket:
   termination:
@@ -40,7 +40,7 @@ websocket:
       api-package: sample.api   
 
 ```
-```api-package```this parameter specify what package the webscoket request classes are placed in 
+```api-package```this parameter specifies what package the webscoket request classes are placed in 
 
 ##### The complete configuration, as follows:  
 ```
@@ -60,7 +60,7 @@ websocket:
 | Configuration Item                                | Default Value |            Description                    |
 |:---------------------------------------------------|:---------:|:----------------------------------------------|
 | websocket.termination.enabled                     | true      | Enable WebSocket termination
-| websocket.termination.endpoint                    | /ws       | The actuator endpoing. By default, the value is ws://IP:Port/ws        |  
+| websocket.termination.endpoint                    | /ws       | The actuator endpoint. By default, the value is ws://IP:Port/ws        |  
 | websocket.termination.order                       | -1        | The sort order for websocket handler mapping
 | websocket.termination.ping.enabled                | true      | Enable PING/PONG                                                        |
 | websocket.termination.ping.interval               | 10        | In seconds，to specify how oftern the server should send a PING frame to client  |
