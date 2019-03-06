@@ -1,5 +1,5 @@
 ### websocket-termination-spring-boot-starter
-[中文文档]()
+[中文文档](https://github.com/zjtech/websocket-termination-spring-boot-starter/blob/master/README_zh.md)
 ## Regarding Websocket Termination
 In case you have a websocket server, you need to pass the received websocket message to a backend service. 
 But unfortunately the backend service is a restful based service, and only the rest API can be invoked.
