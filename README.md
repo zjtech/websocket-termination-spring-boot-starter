@@ -30,7 +30,7 @@ Very convenient, right?
 #### 1. Add this dependency
 For gradle, you can add the dependency like this:    
 ```   
-compile "zjtech:websocket-termination-spring-boot-starter:0.1"
+compile "zjtech:websocket-termination-spring-boot-starter:0.1.1"
 ```   
 #### 2. Enable the websocket termination function in project's configuration file  
 ```

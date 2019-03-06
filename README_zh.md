@@ -26,7 +26,7 @@
 #### 1. 添加依赖    
 对于gradle, 可以添加如下依赖
 ```   
-compile "zjtech:websocket-termination-spring-boot-starter:0.1"
+compile "zjtech:websocket-termination-spring-boot-starter:0.1.1"
 ```   
 #### 2. 在项目的配置文件中启用    
 ```
